@@ -1,0 +1,51 @@
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.4.0
+      hooks:
+          - id: check-yaml
+          - id: end-of-file-fixer
+          - id: trailing-whitespace
+    - repo: https://github.com/psf/black
+      rev: 23.7.0
+      hooks:
+          - id: black
+            language_version: python3.11.2
+    - repo: https://github.com/pycqa/flake8
+      rev: 5.0.4
+      hooks:
+          - id: flake8
+            alias: flake8-py3.8
+            name: flake8 (py3.8)
+            description: This hook checks for flake issues on python3.
+            types: [python]
+            entry: flake8
+            language: python
+            language_version: python3.11
+            args:
+                [
+                    "--ignore=W503,W504,FI51,FI10,FI12,FI13,FI14,FI15,FI16,FI17,FI50,FI52,FI53,FI54,FI55,FI56,FI57,I101",
+                ]
+            additional_dependencies:
+                [
+                    flake8-import-order==0.18,
+                    flake8-import-single==0.1.5,
+                    flake8-pep3101==1.2.1,
+                    flake8-quotes==1.0.0,
+                ]
+
+    - repo: https://github.com/PyCQA/pylint
+      rev: v2.15.3
+      hooks:
+          - id: pylint
+            alias: pylint-py3.8
+            name: pylint (py3.8)
+            description: This hook checks for pylint issues on python3.
+            entry: pylint
+            language: python
+            language_version: python3.11
+            types: [python]
+
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      rev: "v0.0.278"
+      hooks:
+          - id: ruff
