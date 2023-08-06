@@ -1,5 +1,6 @@
 # General
 # ------------------------------------------------------------------------------
+DJANGO_SETTINGS_MODULE=config.docker
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 # Redis
