@@ -10,7 +10,7 @@ SECRET_KEY = env(
     'DJANGO_SECRET_KEY',
     default='UezwPFLUPHFvaEEqzdz0FYzO0wrmwnZWzmSHheisOmPyFbhNxxKzfbEnJW9cLgv6',
 )
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.bitmenu.net', '.localhost']
 
 CACHES = {
     'default': {
