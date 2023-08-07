@@ -1,0 +1,40 @@
+name: Continious integration
+
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+  DJANGO_SETTINGS_MODULE: 'config.docker'
+
+on:
+  pull_request:
+    branches: [ "master", "staging"]
+    paths-ignore: [ "docs/**" ]
+
+  push:
+    branches: [ "master", "staging"]
+    paths-ignore: [ "docs/**" ]
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    name: Pytest - Integration tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+
+      - name: Build the Stack
+        run: docker compose build
+
+      - name: Run DB Migrations
+        run: docker compose run --rm django python manage.py migrate
+
+      - name: Run Integration Tests
+        run: docker compose run django pytest -c ci-pytest.ini tests/integration
+
+      - name: Tear down the Stack
+        run: docker compose down
