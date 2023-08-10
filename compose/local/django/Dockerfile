@@ -12,11 +12,6 @@ RUN apt-get update \
   && apt-get install curl -y \
   && rm -rf /var/lib/apt/lists/*
 
-COPY ./package.json /package.json
-COPY ./package-lock.json /package-lock.json
-
-RUN npm install
-
 COPY ./requirements /requirements
 RUN pip install -r /requirements/local.txt
 
