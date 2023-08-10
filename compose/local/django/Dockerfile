@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
   # psycopg2 dependencies
+  python-psycopg2 \
   libpq-dev
 
 # Requirements are installed here to ensure they will be cached.
@@ -48,6 +49,7 @@ RUN groupadd --gid 1000 dev-user \
 # Install required system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # psycopg2 dependencies
+  python-psycopg2 \
   libpq-dev \
   # Translations dependencies
   gettext \
