@@ -1,6 +1,6 @@
 from config.settings_base import env
 
-DATABASES = {'default': env.db('DATABASE_URL')}
+DATABASES = {'default': env.db('DATABASE_URL', engine='django_tenants.postgresql_backend')}
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 REDIS_URL = 'redis://redis:6379/0'

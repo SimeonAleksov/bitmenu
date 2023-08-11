@@ -10,6 +10,7 @@ READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
 if READ_DOT_ENV_FILE:
     env.read_env(str(BASE_DIR / '.env'))
 
+
 DEBUG = env.bool('DJANGO_DEBUG', False)
 TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-us'
@@ -20,10 +21,13 @@ LOCALE_PATHS = [str(BASE_DIR / 'locale')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'config.tenant_urls'
+PUBLIC_SCHEMA_URLCONF = 'config.public_urls'
+
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DJANGO_APPS = [
+SHARED_APPS = (
+    'django_tenants',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -32,15 +36,14 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.forms',
-]
-THIRD_PARTY_APPS = [
     'django_celery_beat',
-]
-
-LOCAL_APPS = [
+    'rest_framework',
     'apps.users',
-]
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+    'apps.menus',
+    'djstripe',
+)
+
+DATABASE_ROUTERS = ('django_tenants.routers.TenantSyncRouter',)
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -62,6 +65,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -154,3 +158,11 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_WORKER_SEND_TASK_EVENTS = True
 CELERY_TASK_SEND_SENT_EVENT = True
+
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = 'id'
+
+TENANT_MODEL = 'users.Client'
+TENANT_APPS = ('apps.menus',)
+TENANT_DOMAIN_MODEL = 'users.Domain'
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
