@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -6,9 +8,10 @@ from django_tenants.models import TenantMixin
 
 
 class User(AbstractUser):
-    name = models.CharField(_('Name of User'), blank=True, max_length=255)
-    first_name = None  # type: ignore
-    last_name = None  # type: ignore
+    name = models.CharField(_('Name of User'), blank=True, null=True, max_length=255)
+    external_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    first_name = models.CharField(_('First Name of User'), blank=True, null=True, max_length=255)
+    last_name = models.CharField(_('Last Name of User'), blank=True, null=True, max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
